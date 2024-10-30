@@ -2,10 +2,10 @@ import pygame
 import time
 import random
 
-# Initialiser pygame
+# Initialize pygame
 pygame.init()
 
-# Farver
+# Colors
 white = (255, 255, 255)
 yellow = (255, 255, 102)
 black = (0, 0, 0)
@@ -13,7 +13,7 @@ red = (213, 50, 80)
 green = (0, 255, 0)
 blue = (50, 153, 213)
 
-# Spil vindue størrelse
+# Game window size
 dis_width = 600
 dis_height = 400
 
@@ -27,6 +27,11 @@ snake_speed = 15
 
 font_style = pygame.font.SysFont("bahnschrift", 25)
 score_font = pygame.font.SysFont("comicsansms", 35)
+
+# Corrected score function
+def score(score_value):
+    value = score_font.render("Score: " + str(score_value), True, yellow)
+    dis.blit(value, [0, 0])
 
 def our_snake(snake_block, snake_list):
     for x in snake_list:
@@ -48,8 +53,9 @@ def gameLoop():
 
     snake_list = []
     length_of_snake = 1
+    score_value = 0  # Initialize score
 
-    # Spawn af mad
+    # Spawn food
     foodx = round(random.randrange(0, dis_width - snake_block) / 10.0) * 10.0
     foody = round(random.randrange(0, dis_height - snake_block) / 10.0) * 10.0
 
@@ -91,7 +97,7 @@ def gameLoop():
         y1 += y1_change
         dis.fill(blue)
 
-        # Tegn maden
+        # Draw the food
         pygame.draw.rect(dis, red, [foodx, foody, snake_block, snake_block])
 
         snake_head = []
@@ -106,6 +112,9 @@ def gameLoop():
                 game_close = True
 
         our_snake(snake_block, snake_list)
+        
+        # Display score
+        score(score_value)
 
         pygame.display.update()
 
@@ -113,6 +122,7 @@ def gameLoop():
             foodx = round(random.randrange(0, dis_width - snake_block) / 10.0) * 10.0
             foody = round(random.randrange(0, dis_height - snake_block) / 10.0) * 10.0
             length_of_snake += 1
+            score_value += 1  # Increase score
 
         clock.tick(snake_speed)
 
